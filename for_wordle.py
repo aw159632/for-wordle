@@ -1,5 +1,6 @@
 # import nltk
 # nltk.download()
+import re
 
 from nltk.corpus import words
 from collections import Counter
@@ -16,23 +17,20 @@ def get_database_from_txt(file_path):
 
 def get_correct_word(total_words):
     # 綠色
-    dic_correct_letter = {"2": "a", "0": "s", "4": "e", "1": "h"}
+    dic_correct_letter = {}
     # 黃色 + 錯誤的位置資訊
-    dic_position_error_letter = [("0", "a"), ("1", "a"), ("3", "e")]
+    dic_position_error_letter = []
     # 黃色
-    wrong_position_letters = ["a", "e", "s"]
+    wrong_position_letters = []
     # 灰色
-    wrong_totaly_letters = ["u", "d", "i", "o", "b", "l", "r", "y", "t", "p", "c", "v"]
+    wrong_totaly_letters = []
     # 是否要重複字母
     duplicate = True
 
     statistic_letter = {}
-    for word in total_words:
-        word = word.lower()
-        # 只保留五個字的單字
-        if len(word) != 5:
-            continue
-
+    # 只保留五個字的單字(純文字)
+    only_five_words = [word.lower() for word in total_words if re.match(r"^\w{5}$", word)]
+    for word in only_five_words:
         # 去除沒有出現的單字
         wrong_letter_single = False
         for wrong_letter in wrong_totaly_letters:
